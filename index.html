@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f4f5f7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Baustellenjournal">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png"><title>Baustellenjournal · Leibniz-Gymnasium</title>
+<style>
+:root{--bg:#f3f4f6;--card:#fff;--ink:#1d2430;--muted:#77808d;--line:#e7e9ed;--blue:#3568d4;--blue2:#eaf0ff;--green:#23845d;--shadow:0 8px 28px #1720330b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{max-width:1120px;margin:auto;padding:28px 24px 14px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.brand{font-size:12px;letter-spacing:.13em;font-weight:700;color:var(--muted)}h1{font-size:30px;letter-spacing:-.04em;margin:7px 0 4px}.sub{color:var(--muted);font-size:14px}
+main{max-width:1120px;margin:auto;padding:10px 24px 50px}.topline{display:flex;justify-content:space-between;align-items:center;margin:12px 0 18px;color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.tile,.panel{background:var(--card);border:1px solid #eceef1;border-radius:20px;box-shadow:var(--shadow)}
+.tile{padding:18px;min-height:132px}.tile .ico{display:none}.tile .k{font-size:12px;color:var(--muted);margin-top:13px}.tile .v{font-size:25px;font-weight:650;letter-spacing:-.04em;margin-top:4px}
+.layout{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;margin-top:16px}.panel{padding:20px}.panel h2{font-size:17px;margin:0 0 5px;letter-spacing:-.02em}.hint{color:var(--muted);font-size:13px;margin:0 0 18px}
+button,.button{border:0;border-radius:12px;padding:11px 15px;font-weight:600;font-size:14px;cursor:pointer;background:var(--blue);color:white}.secondary{background:#f0f2f5;color:#273142}.ghost{background:var(--blue2);color:var(--blue)}.wide{width:100%}
+label{display:block;font-size:12px;color:var(--muted);font-weight:650;margin:15px 0 7px}input,textarea,select{width:100%;font:inherit;border:1px solid var(--line);border-radius:12px;background:#fbfcfd;padding:12px;color:var(--ink);outline:none}textarea{min-height:135px;resize:vertical;line-height:1.5}input:focus,textarea:focus{border-color:#9bb5f2;box-shadow:0 0 0 3px #3568d414}
+.row{display:flex;gap:10px;align-items:center}.row>*{flex:1}.weather{display:flex;align-items:center;gap:13px;background:#f7f9fc;border-radius:15px;padding:13px}.weather .temp{font-size:24px;font-weight:700}.muted{color:var(--muted);font-size:12px}
+.drop{border:1.5px dashed #cbd2dc;border-radius:15px;padding:18px;text-align:center;background:#fafbfd}.drop input{display:none}.photos{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}.photos img{width:100%;height:88px;object-fit:cover;border-radius:10px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.entry{padding:13px 0;border-top:1px solid var(--line)}.entry:first-child{border-top:0}.entryhead{display:flex;justify-content:space-between;gap:12px;font-size:13px;font-weight:650}.entry p{white-space:pre-wrap;margin:8px 0 0;color:#4b5563;font-size:13px;line-height:1.5}.pill{font-size:11px;background:#eef2f7;color:#596575;border-radius:20px;padding:5px 9px}
+#status{font-size:12px;color:var(--green);min-height:18px;margin-top:10px}.empty{color:var(--muted);font-size:13px;padding:15px 0}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}header{padding:22px 16px 10px}main{padding:8px 16px 35px}.tile{min-height:116px}.photos{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:420px){h1{font-size:25px}.tile{padding:14px}.panel{padding:16px}}
+</style></head>
+<body>
+<header><div><div class="brand">BAUSTELLENJOURNAL</div><h1>Leibniz-Gymnasium</h1><div class="sub">Altdorf · BA3 Freianlagen</div></div><div class="pill">PROTOTYP · PERSÖNLICH</div></header>
+<main>
+<div class="topline"><span id="today"></span><span>Projekt aktiv</span></div>
+<section class="grid">
+ <div class="tile"><div class="k">WETTER IN ALTDORF</div><div class="v" id="temp">– °C</div><div class="muted" id="weatherText">Wird geladen …</div></div>
+ <div class="tile"><div class="k">BAUSTELLENTERMINE</div><div class="v" id="count">0</div><div class="muted">Lokal gespeichert</div></div>
+ <div class="tile"><div class="k">FOTOS</div><div class="v" id="photoCount">0</div><div class="muted">In deinen Einträgen</div></div>
+ <div class="tile"><div class="k">LETZTER EINTRAG</div><div class="v" id="lastDate">–</div><div class="muted">Chronologischer Verlauf</div></div>
+</section>
+<section class="layout">
+ <div class="panel">
+  <h2>Neuer Baustellentermin</h2><p class="hint">Schnell erfassen – später am PC vervollständigen.</p>
+  <div class="row"><div><label>DATUM</label><input id="date" type="date"></div><div><label>UHRZEIT</label><input id="time" type="time"></div></div>
+  <label>WETTER / BESONDERE BEDINGUNGEN</label>
+  <div class="weather"><div style="font-size:20px;color:#77808d;font-weight:500" id="weatherIcon">—</div><div style="flex:1"><div class="temp" id="weatherInline">Wetterdaten …</div><div class="muted" id="weatherDetail">Altdorf bei Nürnberg · Open-Meteo</div></div><button class="secondary" id="refreshWeather" type="button">↻</button></div>
+  <label for="notes">STICHPUNKTE / NOTIZEN</label><textarea id="notes" placeholder="Zum Beispiel:&#10;– Sitzpodeste: Betonfertigteile abgestimmt&#10;– Mastleuchten: Fundamentausbildung klären&#10;– Rigole WSW 5: Wiederverfüllung kontrollieren"></textarea>
+  <label>FOTOS HINZUFÜGEN</label>
+  <label class="drop" for="photos" style="margin:0;cursor:pointer"><div style="font-size:24px">＋</div><strong>Fotos auswählen oder aufnehmen</strong><div class="muted">Mehrere Bilder möglich · werden diesem Termin zugeordnet</div><input id="photos" type="file" accept="image/*" capture="environment" multiple></label>
+  <div class="photos" id="preview"></div>
+  <div class="actions"><button id="save" type="button">Termin speichern</button><button id="clear" class="secondary" type="button">Zurücksetzen</button></div><div id="status"></div>
+ </div>
+ <div class="panel">
+  <h2>Letzte Baustellentermine</h2><p class="hint">Deine Dokumentation im Überblick.</p>
+  <div id="entries"><div class="empty">Noch keine Termine erfasst.</div></div>
+  <div class="actions"><button class="ghost" id="export">Daten exportieren</button><button class="secondary" id="importBtn">Importieren</button><input id="importFile" type="file" accept="application/json" hidden></div>
+  <p class="muted" style="line-height:1.5;margin-top:14px">Hinweis: Die Daten bleiben zunächst in diesem Browser auf diesem Gerät. Für die Bearbeitung am Büro-PC kannst du sie exportieren und dort wieder importieren. Eine automatische Gerätesynchronisierung ist in dieser ersten Version noch nicht enthalten.</p>
+ </div>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id), KEY='baustellenjournal_lga_ba3_v1';
+let photos=[], weatherData=null, records=[];
+try{records=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){records=[]}
+const now=new Date(), pad=n=>String(n).padStart(2,'0'), iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+$('today').textContent=now.toLocaleDateString('de-DE',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+$('date').value=iso(now);$('time').value=`${pad(now.getHours())}:${pad(now.getMinutes())}`;
+function persist(){localStorage.setItem(KEY,JSON.stringify(records));render()}
+function render(){
+ $('count').textContent=records.length;
+ $('photoCount').textContent=records.reduce((n,r)=>n+(r.photos||[]).length,0);
+ $('lastDate').textContent=records.length?new Date(records[0].date+'T00:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit'}):'–';
+ $('entries').innerHTML=records.length?records.slice(0,8).map(r=>`<div class="entry"><div class="entryhead"><span>${new Date(r.date+'T00:00:00').toLocaleDateString('de-DE')} · ${esc(r.time||'')}</span><span class="pill">${(r.photos||[]).length} Fotos</span></div><p>${esc(r.notes||'Keine Notizen')}</p></div>`).join(''):'<div class="empty">Noch keine Termine erfasst.</div>';
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function weatherCode(c){if(c===0)return ['○','Klar'];if([1,2].includes(c))return ['◐','Heiter bis wolkig'];if(c===3)return ['☰','Bedeckt'];if([45,48].includes(c))return ['≋','Nebel'];if([51,53,55,61,63,65,80,81,82].includes(c))return ['⌁','Regen / Schauer'];if([71,73,75,77,85,86].includes(c))return ['＊','Schnee'];if([95,96,99].includes(c))return ['⌁','Gewitter'];return ['—','Wetterlage']}
+async function loadWeather(){
+ $('weatherText').textContent='Wird geladen …';$('weatherInline').textContent='Wetterdaten …';
+ try{
+  const url='https://api.open-meteo.com/v1/forecast?latitude=49.385&longitude=11.357&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&timezone=Europe%2FBerlin';
+  const res=await fetch(url);if(!res.ok)throw Error('Wetterdienst nicht erreichbar');const j=await res.json(),c=j.current,[ic,desc]=weatherCode(c.weather_code);
+  weatherData={temperature:c.temperature_2m,humidity:c.relative_humidity_2m,precipitation:c.precipitation,wind:c.wind_speed_10m,description:desc,updated:c.time};
+  $('temp').textContent=Math.round(c.temperature_2m)+' °C';$('weatherText').textContent=desc;$('weatherIcon').textContent=ic;
+  $('weatherInline').textContent=`${c.temperature_2m.toFixed(1)} °C · ${desc}`;
+  $('weatherDetail').textContent=`Gefühlt ${c.apparent_temperature.toFixed(1)} °C · Wind ${c.wind_speed_10m} km/h · Niederschlag ${c.precipitation} mm`;
+ }catch(e){$('temp').textContent='– °C';$('weatherText').textContent='Nicht verfügbar';$('weatherInline').textContent='Abruf nicht möglich';$('weatherDetail').textContent='Bitte Internetverbindung prüfen oder Wetter manuell notieren.'}
+}
+$('refreshWeather').onclick=loadWeather;
+$('photos').onchange=async e=>{for(const f of e.target.files){if(!f.type.startsWith('image/'))continue;const data=await new Promise(resolve=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.readAsDataURL(f)});photos.push({name:f.name,data});}renderPreviews();e.target.value=''};
+function renderPreviews(){$('preview').innerHTML=photos.map((p,i)=>`<div style="position:relative"><img src="${p.data}" alt="${esc(p.name)}"><button type="button" onclick="removePhoto(${i})" style="position:absolute;right:4px;top:4px;padding:4px 8px;border-radius:8px">×</button></div>`).join('')}
+window.removePhoto=i=>{photos.splice(i,1);renderPreviews()};
+$('save').onclick=()=>{
+ const date=$('date').value,notes=$('notes').value.trim();if(!date){$('status').textContent='Bitte ein Datum auswählen.';return}
+ const r={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),date,time:$('time').value,notes,photos,weather:weatherData,createdAt:new Date().toISOString()};
+ records.unshift(r);try{persist();photos=[];$('preview').innerHTML='';$('notes').value='';$('status').textContent='Termin lokal gespeichert.'}catch(e){records.shift();$('status').textContent='Speicher voll. Bitte weniger oder kleinere Fotos verwenden.'}
+};
+$('clear').onclick=()=>{$('notes').value='';photos=[];$('preview').innerHTML='';$('status').textContent='Eingabe zurückgesetzt.'};
+$('export').onclick=()=>{const blob=new Blob([JSON.stringify({project:'Leibniz-Gymnasium Altdorf BA3',exportedAt:new Date().toISOString(),records},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='baustellenjournal-lga-ba3.json';a.click();URL.revokeObjectURL(a.href)};
+$('importBtn').onclick=()=>$('importFile').click();
+$('importFile').onchange=async e=>{try{const j=JSON.parse(await e.target.files[0].text());const incoming=Array.isArray(j)?j:j.records;if(!Array.isArray(incoming))throw Error();const ids=new Set(records.map(x=>x.id));records=[...incoming.filter(x=>!ids.has(x.id)),...records];persist();$('status').textContent='Import abgeschlossen.'}catch(err){$('status').textContent='Import fehlgeschlagen: Datei nicht erkannt.'}e.target.value=''};
+render();loadWeather();
+</script><script>if ("serviceWorker" in navigator) { window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {})); }</script>
+</body></html>
