@@ -18,10 +18,10 @@ main{max-width:1120px;margin:auto;padding:10px 24px 50px}.topline{display:flex;j
 .tile{padding:18px;min-height:132px}.tile .ico{display:none}.tile .k{font-size:12px;color:var(--muted);margin-top:13px}.tile .v{font-size:25px;font-weight:650;letter-spacing:-.04em;margin-top:4px}
 .layout{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;margin-top:16px}.panel{padding:20px}.panel h2{font-size:17px;margin:0 0 5px;letter-spacing:-.02em}.hint{color:var(--muted);font-size:13px;margin:0 0 18px}
 button,.button{border:0;border-radius:12px;padding:11px 15px;font-weight:600;font-size:14px;cursor:pointer;background:var(--blue);color:white}.secondary{background:#f0f2f5;color:#273142}.ghost{background:var(--blue2);color:var(--blue)}.wide{width:100%}
-label{display:block;font-size:12px;color:var(--muted);font-weight:650;margin:15px 0 7px}input,textarea,select{width:100%;font:inherit;border:1px solid var(--line);border-radius:12px;background:#fbfcfd;padding:12px;color:var(--ink);outline:none}textarea{min-height:135px;resize:vertical;line-height:1.5}input:focus,textarea:focus{border-color:#9bb5f2;box-shadow:0 0 0 3px #3568d414}
+label{display:block;font-size:12px;color:var(--muted);font-weight:650;margin:15px 0 7px}input,textarea,select{width:100%;font:inherit;border:1px solid var(--line);border-radius:12px;background:#fbfcfd;padding:12px;color:var(--ink);outline:none}textarea{min-height:105px;resize:vertical;line-height:1.5}input:focus,textarea:focus{border-color:#9bb5f2;box-shadow:0 0 0 3px #3568d414}
 .row{display:flex;gap:10px;align-items:center}.row>*{flex:1}.weather{display:flex;align-items:center;gap:13px;background:#f7f9fc;border-radius:15px;padding:13px}.weather .temp{font-size:24px;font-weight:700}.muted{color:var(--muted);font-size:12px}
 .drop{border:1.5px dashed #cbd2dc;border-radius:15px;padding:18px;text-align:center;background:#fafbfd}.drop input{display:none}.photos{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}.photos img{width:100%;height:88px;object-fit:cover;border-radius:10px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.entry{padding:13px 0;border-top:1px solid var(--line)}.entry:first-child{border-top:0}.entryhead{display:flex;justify-content:space-between;gap:12px;font-size:13px;font-weight:650}.entry p{white-space:pre-wrap;margin:8px 0 0;color:#4b5563;font-size:13px;line-height:1.5}.pill{font-size:11px;background:#eef2f7;color:#596575;border-radius:20px;padding:5px 9px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.entry{padding:13px 0;border-top:1px solid var(--line)}.entry:first-child{border-top:0}.entryhead{display:flex;justify-content:space-between;gap:12px;font-size:13px;font-weight:650}.entry p{white-space:pre-wrap;margin:8px 0 0;color:#4b5563;font-size:13px;line-height:1.5}.entryactions{display:flex;gap:7px;margin-top:10px}.entryactions button{padding:8px 11px;font-size:12px}.danger{background:#fff0f0;color:#b42318}.pill{font-size:11px;background:#eef2f7;color:#596575;border-radius:20px;padding:5px 9px}
 #status{font-size:12px;color:var(--green);min-height:18px;margin-top:10px}.empty{color:var(--muted);font-size:13px;padding:15px 0}
 @media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}header{padding:22px 16px 10px}main{padding:8px 16px 35px}.tile{min-height:116px}.photos{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:420px){h1{font-size:25px}.tile{padding:14px}.panel{padding:16px}}
@@ -38,27 +38,30 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:650;margin:15p
 </section>
 <section class="layout">
  <div class="panel">
-  <h2>Neuer Baustellentermin</h2><p class="hint">Schnell erfassen – später am PC vervollständigen.</p>
+  <h2 id="formTitle">Neuer Baustellentermin</h2><p class="hint">Schnell erfassen – später am PC vervollständigen.</p>
   <div class="row"><div><label>DATUM</label><input id="date" type="date"></div><div><label>UHRZEIT</label><input id="time" type="time"></div></div>
   <label>WETTER / BESONDERE BEDINGUNGEN</label>
   <div class="weather"><div style="font-size:20px;color:#77808d;font-weight:500" id="weatherIcon">—</div><div style="flex:1"><div class="temp" id="weatherInline">Wetterdaten …</div><div class="muted" id="weatherDetail">Altdorf bei Nürnberg · Open-Meteo</div></div><button class="secondary" id="refreshWeather" type="button">↻</button></div>
-  <label for="notes">STICHPUNKTE / NOTIZEN</label><textarea id="notes" placeholder="Zum Beispiel:&#10;– Sitzpodeste: Betonfertigteile abgestimmt&#10;– Mastleuchten: Fundamentausbildung klären&#10;– Rigole WSW 5: Wiederverfüllung kontrollieren"></textarea>
+  <div class="row"><div><label for="workers">ANZAHL ARBEITSKRÄFTE</label><input id="workers" type="number" min="0" step="1" inputmode="numeric" placeholder="z. B. 6"></div><div><label for="company">AUSFÜHRENDE FIRMA (OPTIONAL)</label><input id="company" type="text" placeholder="Firma / Gewerk"></div></div>
+  <label for="currentWork">DERZEIT AUSGEFÜHRTE ARBEITEN</label><textarea id="currentWork" placeholder="Was wird gerade auf der Baustelle gemacht?"></textarea>
+  <label for="completedWork">FERTIGGESTELLTE ARBEITEN</label><textarea id="completedWork" placeholder="Welche Leistungen wurden seit dem letzten Termin fertiggestellt?"></textarea>
+  <label for="notes">WEITERE STICHPUNKTE / BEMERKUNGEN</label><textarea id="notes" placeholder="Zum Beispiel:&#10;– Sitzpodeste: Betonfertigteile abgestimmt&#10;– Mastleuchten: Fundamentausbildung klären&#10;– Rigole WSW 5: Wiederverfüllung kontrollieren"></textarea>
   <label>FOTOS HINZUFÜGEN</label>
-  <label class="drop" for="photos" style="margin:0;cursor:pointer"><div style="font-size:24px">＋</div><strong>Fotos auswählen oder aufnehmen</strong><div class="muted">Mehrere Bilder möglich · werden diesem Termin zugeordnet</div><input id="photos" type="file" accept="image/*" capture="environment" multiple></label>
+  <label class="drop" for="photos" style="margin:0;cursor:pointer"><div style="font-size:24px">＋</div><strong>Fotos auswählen oder aufnehmen</strong><div class="muted">Mehrere Bilder möglich · werden automatisch verkleinert und komprimiert</div><input id="photos" type="file" accept="image/*" capture="environment" multiple></label>
   <div class="photos" id="preview"></div>
   <div class="actions"><button id="save" type="button">Termin speichern</button><button id="clear" class="secondary" type="button">Zurücksetzen</button></div><div id="status"></div>
  </div>
  <div class="panel">
-  <h2>Letzte Baustellentermine</h2><p class="hint">Deine Dokumentation im Überblick.</p>
+  <h2>Protokollarchiv</h2><p class="hint">Alle bisherigen Baustellentermine – öffnen, bearbeiten oder löschen.</p>
   <div id="entries"><div class="empty">Noch keine Termine erfasst.</div></div>
-  <div class="actions"><button class="ghost" id="export">Daten exportieren</button><button class="secondary" id="importBtn">Importieren</button><input id="importFile" type="file" accept="application/json" hidden></div>
+  <div class="actions"><button class="ghost" id="export">Daten exportieren (JSON)</button><button class="secondary" id="exportPdf">Als PDF ausgeben</button><button class="secondary" id="importBtn">Importieren</button><input id="importFile" type="file" accept="application/json" hidden></div>
   <p class="muted" style="line-height:1.5;margin-top:14px">Hinweis: Die Daten bleiben zunächst in diesem Browser auf diesem Gerät. Für die Bearbeitung am Büro-PC kannst du sie exportieren und dort wieder importieren. Eine automatische Gerätesynchronisierung ist in dieser ersten Version noch nicht enthalten.</p>
  </div>
 </section>
 </main>
 <script>
 const $=id=>document.getElementById(id), KEY='baustellenjournal_lga_ba3_v1';
-let photos=[], weatherData=null, records=[];
+let photos=[], weatherData=null, records=[], editingId=null;
 try{records=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){records=[]}
 const now=new Date(), pad=n=>String(n).padStart(2,'0'), iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 $('today').textContent=now.toLocaleDateString('de-DE',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
@@ -68,7 +71,7 @@ function render(){
  $('count').textContent=records.length;
  $('photoCount').textContent=records.reduce((n,r)=>n+(r.photos||[]).length,0);
  $('lastDate').textContent=records.length?new Date(records[0].date+'T00:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit'}):'–';
- $('entries').innerHTML=records.length?records.slice(0,8).map(r=>`<div class="entry"><div class="entryhead"><span>${new Date(r.date+'T00:00:00').toLocaleDateString('de-DE')} · ${esc(r.time||'')}</span><span class="pill">${(r.photos||[]).length} Fotos</span></div><p>${esc(r.notes||'Keine Notizen')}</p></div>`).join(''):'<div class="empty">Noch keine Termine erfasst.</div>';
+ $('entries').innerHTML=records.length?records.map(r=>`<div class="entry"><div class="entryhead"><span>${new Date(r.date+'T00:00:00').toLocaleDateString('de-DE')} · ${esc(r.time||'')}</span><span class="pill">${(r.photos||[]).length} Fotos</span></div>${r.company?`<div class="muted" style="margin-top:5px">${esc(r.company)}</div>`:''}<p>${r.workers!==undefined&&r.workers!==''?esc(r.workers)+' Arbeitskräfte · ':''}${esc(r.currentWork||r.completedWork||r.notes||'Keine Notizen')}</p><div class="entryactions"><button type="button" class="ghost" data-edit="${esc(r.id)}">Bearbeiten</button><button type="button" class="danger" data-delete="${esc(r.id)}">Löschen</button></div></div>`).join(''):'<div class="empty">Noch keine Termine erfasst.</div>';
 }
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function weatherCode(c){if(c===0)return ['○','Klar'];if([1,2].includes(c))return ['◐','Heiter bis wolkig'];if(c===3)return ['☰','Bedeckt'];if([45,48].includes(c))return ['≋','Nebel'];if([51,53,55,61,63,65,80,81,82].includes(c))return ['⌁','Regen / Schauer'];if([71,73,75,77,85,86].includes(c))return ['＊','Schnee'];if([95,96,99].includes(c))return ['⌁','Gewitter'];return ['—','Wetterlage']}
@@ -84,18 +87,51 @@ async function loadWeather(){
  }catch(e){$('temp').textContent='– °C';$('weatherText').textContent='Nicht verfügbar';$('weatherInline').textContent='Abruf nicht möglich';$('weatherDetail').textContent='Bitte Internetverbindung prüfen oder Wetter manuell notieren.'}
 }
 $('refreshWeather').onclick=loadWeather;
-$('photos').onchange=async e=>{for(const f of e.target.files){if(!f.type.startsWith('image/'))continue;const data=await new Promise(resolve=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.readAsDataURL(f)});photos.push({name:f.name,data});}renderPreviews();e.target.value=''};
+function readAsDataURL(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)})}
+function imageFromSource(src){return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=src})}
+async function compressImageSource(src){
+ const img=await imageFromSource(src);const maxSide=1600,scale=Math.min(1,maxSide/Math.max(img.naturalWidth,img.naturalHeight));
+ const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));
+ const ctx=canvas.getContext('2d',{alpha:false});ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);
+ return canvas.toDataURL('image/jpeg',0.76);
+}
+function dataSize(data){return Math.round((data.length-(data.indexOf(',')+1))*0.75/1024)}
+$('photos').onchange=async e=>{
+ const files=Array.from(e.target.files||[]);let added=0;
+ $('status').textContent='Fotos werden verkleinert …';
+ for(const f of files){if(!f.type.startsWith('image/'))continue;try{const original=await readAsDataURL(f);let data;try{data=await compressImageSource(original)}catch(err){data=original}photos.push({name:f.name,data});added++;}catch(err){}}
+ renderPreviews();e.target.value='';const total=photos.reduce((n,p)=>n+dataSize(p.data),0);$('status').textContent=`${added} Foto(s) hinzugefügt · ca. ${total} KB für diesen Eintrag`;
+};
 function renderPreviews(){$('preview').innerHTML=photos.map((p,i)=>`<div style="position:relative"><img src="${p.data}" alt="${esc(p.name)}"><button type="button" onclick="removePhoto(${i})" style="position:absolute;right:4px;top:4px;padding:4px 8px;border-radius:8px">×</button></div>`).join('')}
+async function compressExistingPhotos(){let changed=false;for(const r of records){for(const p of (r.photos||[])){if(!p.data||!p.data.startsWith('data:image/'))continue;try{const smaller=await compressImageSource(p.data);if(smaller.length<p.data.length*0.9){p.data=smaller;changed=true}}catch(e){}}}if(changed){try{localStorage.setItem(KEY,JSON.stringify(records));render()}catch(e){$('status').textContent='Einige ältere Fotos konnten nicht automatisch verkleinert werden. Bitte Daten exportieren und sichern.'}}}
 window.removePhoto=i=>{photos.splice(i,1);renderPreviews()};
+function resetForm(){editingId=null;photos=[];$('preview').innerHTML='';$('date').value=iso(new Date());$('time').value=`${pad(new Date().getHours())}:${pad(new Date().getMinutes())}`;$('workers').value='';$('company').value='';$('currentWork').value='';$('completedWork').value='';$('notes').value='';$('formTitle').textContent='Neuer Baustellentermin';$('save').textContent='Termin speichern';$('status').textContent='Eingabe zurückgesetzt.'}
+function editRecord(id){const r=records.find(x=>x.id===id);if(!r)return;editingId=id;$('date').value=r.date||iso(new Date());$('time').value=r.time||'';$('workers').value=r.workers??'';$('company').value=r.company||'';$('currentWork').value=r.currentWork||'';$('completedWork').value=r.completedWork||'';$('notes').value=r.notes||'';photos=(r.photos||[]).map(p=>({...p}));renderPreviews();$('formTitle').textContent='Baustellentermin bearbeiten';$('save').textContent='Änderungen speichern';$('status').textContent='Bestehender Eintrag wird bearbeitet.';document.querySelector('.layout .panel').scrollIntoView({behavior:'smooth',block:'start'})}
+function deleteRecord(id){const r=records.find(x=>x.id===id);if(!r)return;const d=new Date((r.date||'')+'T00:00:00').toLocaleDateString('de-DE');if(!confirm(`Baustellentermin vom ${d} wirklich löschen? Dieser Eintrag und seine Fotos werden dauerhaft aus diesem Browser entfernt.`))return;records=records.filter(x=>x.id!==id);if(editingId===id)resetForm();try{persist();$('status').textContent='Baustellentermin gelöscht.'}catch(e){$('status').textContent='Löschen konnte nicht gespeichert werden.'}}
+$('entries').addEventListener('click',e=>{const edit=e.target.closest('[data-edit]'),del=e.target.closest('[data-delete]');if(edit)editRecord(edit.dataset.edit);if(del)deleteRecord(del.dataset.delete)});
 $('save').onclick=()=>{
  const date=$('date').value,notes=$('notes').value.trim();if(!date){$('status').textContent='Bitte ein Datum auswählen.';return}
- const r={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),date,time:$('time').value,notes,photos,weather:weatherData,createdAt:new Date().toISOString()};
- records.unshift(r);try{persist();photos=[];$('preview').innerHTML='';$('notes').value='';$('status').textContent='Termin lokal gespeichert.'}catch(e){records.shift();$('status').textContent='Speicher voll. Bitte weniger oder kleinere Fotos verwenden.'}
+ const base={date,time:$('time').value,workers:$('workers').value,company:$('company').value.trim(),currentWork:$('currentWork').value.trim(),completedWork:$('completedWork').value.trim(),notes,photos:photos.map(p=>({...p})),weather:weatherData};
+ if(editingId){const idx=records.findIndex(x=>x.id===editingId);if(idx<0){$('status').textContent='Der Eintrag wurde nicht gefunden.';return}const previous=records[idx];records[idx]={...previous,...base,updatedAt:new Date().toISOString()};try{persist();resetForm();$('status').textContent='Änderungen am Protokoll gespeichert.'}catch(e){records[idx]=previous;$('status').textContent='Speicher voll. Änderungen konnten nicht gespeichert werden.'}}
+ else{const r={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),...base,createdAt:new Date().toISOString()};records.unshift(r);try{persist();resetForm();$('status').textContent='Termin lokal gespeichert.'}catch(e){records.shift();$('status').textContent='Speicher voll. Bitte exportiere deine Daten zur Sicherung und entferne ältere Einträge oder Fotos.'}}
 };
-$('clear').onclick=()=>{$('notes').value='';photos=[];$('preview').innerHTML='';$('status').textContent='Eingabe zurückgesetzt.'};
+$('clear').onclick=resetForm;
 $('export').onclick=()=>{const blob=new Blob([JSON.stringify({project:'Leibniz-Gymnasium Altdorf BA3',exportedAt:new Date().toISOString(),records},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='baustellenjournal-lga-ba3.json';a.click();URL.revokeObjectURL(a.href)};
+$('exportPdf').onclick=()=>{
+ if(!records.length){$('status').textContent='Noch keine Protokolle für den PDF-Export vorhanden.';return}
+ const fmt=d=>new Date(d+'T00:00:00').toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'});
+ const section=(title,value)=>value?`<section><h3>${title}</h3><p>${esc(value).replace(/\n/g,'<br>')}</p></section>`:'';
+ const cards=records.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.time||'').localeCompare(b.time||'')).map(r=>{
+  const w=r.weather?`${r.weather.temperature??'–'} °C · ${r.weather.description||''} · Luftfeuchte ${r.weather.humidity??'–'} % · Wind ${r.weather.wind??'–'} km/h`:'';
+  const imgs=(r.photos||[]).map(p=>`<figure><img src="${p.data}" alt="${esc(p.name||'Baustellenfoto')}"><figcaption>${esc(p.name||'Foto')}</figcaption></figure>`).join('');
+  return `<article><header><div><h2>Baustellentermin · ${fmt(r.date)}</h2><div class="meta">${esc(r.time||'')} ${r.company?' · '+esc(r.company):''}</div></div><div class="workers">${r.workers!==undefined&&r.workers!==''?esc(r.workers)+' Arbeitskräfte':''}</div></header>${w?`<p class="weather">Wetter: ${esc(w)}</p>`:''}${section('Derzeit ausgeführte Arbeiten',r.currentWork)}${section('Fertiggestellte Arbeiten',r.completedWork)}${section('Weitere Stichpunkte / Bemerkungen',r.notes)}${imgs?`<div class="photos">${imgs}</div>`:''}</article>`;
+ }).join('');
+ const win=window.open('','_blank');if(!win){$('status').textContent='Bitte Pop-ups für diese App erlauben, um den PDF-Export zu öffnen.';return}
+ win.document.write(`<!doctype html><html lang="de"><head><meta charset="utf-8"><title>Baustellenjournal – Protokollarchiv</title><style>body{font:12px Arial,sans-serif;color:#202733;margin:24px}h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:0 0 4px}h3{font-size:12px;margin:13px 0 4px;color:#526071;text-transform:uppercase;letter-spacing:.04em}p{line-height:1.5;margin:3px 0}.sub,.meta{color:#687385;font-size:11px}.intro{margin-bottom:22px}article{break-inside:avoid;border-top:1px solid #d9dee6;padding:15px 0}article header{display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 8px;padding:0}.workers{font-weight:bold}.weather{color:#586476;font-size:11px}.photos{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}figure{margin:0;width:31%;break-inside:avoid}figure img{width:100%;max-height:180px;object-fit:contain}figcaption{font-size:9px;color:#687385}@page{size:A4;margin:15mm}@media print{body{margin:0}}</style></head><body><div class="intro"><h1>Baustellenjournal</h1><div class="sub">Leibniz-Gymnasium Altdorf · BA3 Freianlagen</div><div class="sub">Protokollarchiv · Export: ${new Date().toLocaleString('de-DE')}</div></div>${cards}</body></html>`);
+ win.document.close();setTimeout(()=>win.print(),700);
+};
 $('importBtn').onclick=()=>$('importFile').click();
 $('importFile').onchange=async e=>{try{const j=JSON.parse(await e.target.files[0].text());const incoming=Array.isArray(j)?j:j.records;if(!Array.isArray(incoming))throw Error();const ids=new Set(records.map(x=>x.id));records=[...incoming.filter(x=>!ids.has(x.id)),...records];persist();$('status').textContent='Import abgeschlossen.'}catch(err){$('status').textContent='Import fehlgeschlagen: Datei nicht erkannt.'}e.target.value=''};
-render();loadWeather();
+render();loadWeather();compressExistingPhotos();
 </script><script>if ("serviceWorker" in navigator) { window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {})); }</script>
 </body></html>
