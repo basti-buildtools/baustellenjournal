@@ -34,7 +34,7 @@ body{padding-bottom:84px}.pdf-overlay{position:fixed;inset:0;z-index:100;backgro
 @media(max-width:420px){h1{font-size:25px}.tile{padding:14px}.panel{padding:16px}}
 </style></head>
 <body>
-<header id="startAnchor"><div><div class="brand">BAUSTELLENJOURNAL</div><h1>Leibniz-Gymnasium</h1><div class="sub">Altdorf · BA3 Freianlagen</div></div><div class="pill">VERSION 0.7.0 · PERSÖNLICH</div></header>
+<header id="startAnchor"><div><div class="brand">BAUSTELLENJOURNAL</div><h1>Leibniz-Gymnasium</h1><div class="sub">Altdorf · BA3 Freianlagen</div></div><div class="pill">VERSION 0.7.1 · PERSÖNLICH</div></header>
 <main id="homeView">
 <div class="topline"><span id="today"></span><span>Projekt aktiv</span></div>
 <section class="grid">
@@ -66,7 +66,7 @@ body{padding-bottom:84px}.pdf-overlay{position:fixed;inset:0;z-index:100;backgro
  </div>
 </section>
 </main>
-<footer style="max-width:1120px;margin:0 auto;padding:0 24px 24px;text-align:center;color:var(--muted);font-size:11px">Baustellenjournal · Version 0.7.0</footer>
+<footer style="max-width:1120px;margin:0 auto;padding:0 24px 24px;text-align:center;color:var(--muted);font-size:11px">Baustellenjournal · Version 0.7.1</footer>
 
 <nav class="bottom-nav" aria-label="Hauptnavigation">
  <button class="active" data-tab="start"><span>⌂</span><span>Start</span></button>
@@ -149,9 +149,9 @@ function buildPdfHtml(list,title){
  const cards=list.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.time||'').localeCompare(b.time||'')).map(r=>{
   const w=r.weather?`${r.weather.temperature??'–'} °C · ${r.weather.description||''} · Luftfeuchte ${r.weather.humidity??'–'} % · Wind ${r.weather.wind??'–'} km/h`:'';
   const imgs=(r.photos||[]).map(p=>`<figure><img src="${p.data}" alt="${esc(p.name||'Baustellenfoto')}"><figcaption>${esc(p.name||'Foto')}</figcaption></figure>`).join('');
-  return `<article><header><div><h2>Baustellentermin · ${fmt(r.date)}</h2><div class="meta">${esc(r.time||'')} ${r.company?' · '+esc(r.company):''}</div></div><div class="workers">${r.workers!==undefined&&r.workers!==''?esc(r.workers)+' Arbeitskräfte':''}</div></header>${w?`<p class="weather">Wetter: ${esc(w)}</p>`:''}${section('Derzeit ausgeführte Arbeiten',r.currentWork)}${section('Fertiggestellte Arbeiten',r.completedWork)}${section('Weitere Stichpunkte / Bemerkungen',r.notes)}${imgs?`<div class="photos">${imgs}</div>`:''}</article>`;
+  return `<article><header><div><h2>Baustellentermin</h2><div class="meta pdf-meta"><span>Datum: ${fmt(r.date)}</span>${r.time?`<span>Uhrzeit: ${esc(r.time)} Uhr</span>`:''}${r.company?`<span>Firma: ${esc(r.company)}</span>`:''}</div></div><div class="workers">${r.workers!==undefined&&r.workers!==''?esc(r.workers)+' Arbeitskräfte':''}</div></header>${w?`<p class="weather">Wetter: ${esc(w)}</p>`:''}${section('Derzeit ausgeführte Arbeiten',r.currentWork)}${section('Fertiggestellte Arbeiten',r.completedWork)}${section('Weitere Stichpunkte / Bemerkungen',r.notes)}${imgs?`<div class="photos">${imgs}</div>`:''}</article>`;
  }).join('');
- return `<!doctype html><html lang="de"><head><meta charset="utf-8"><title>${esc(title)}</title><style>body{font:12px Arial,sans-serif;color:#202733;margin:24px}h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:0 0 4px}h3{font-size:12px;margin:13px 0 4px;color:#526071;text-transform:uppercase;letter-spacing:.04em}p{line-height:1.5;margin:3px 0}.sub,.meta{color:#687385;font-size:11px}.intro{margin-bottom:22px}article{break-inside:avoid;border-top:1px solid #d9dee6;padding:15px 0}article header{display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 8px;padding:0}.workers{font-weight:bold}.weather{color:#586476;font-size:11px}.photos{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}figure{margin:0;width:31%;break-inside:avoid}figure img{width:100%;max-height:180px;object-fit:contain}figcaption{font-size:9px;color:#687385}@page{size:A4;margin:15mm}@media print{body{margin:0}}</style></head><body><div class="intro"><h1>Baustellenjournal</h1><div class="sub">Leibniz-Gymnasium Altdorf · BA3 Freianlagen</div><div class="sub">${esc(title)} · Export: ${new Date().toLocaleString('de-DE')}</div></div>${cards}</body></html>`;
+ return `<!doctype html><html lang="de"><head><meta charset="utf-8"><title>${esc(title)}</title><style>body{font:12px Arial,sans-serif;color:#202733;margin:24px}h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:0 0 4px}h3{font-size:12px;margin:13px 0 4px;color:#526071;text-transform:uppercase;letter-spacing:.04em}p{line-height:1.5;margin:3px 0}.sub,.meta{color:#687385;font-size:11px}.pdf-meta{display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:2px}.pdf-meta span{white-space:nowrap}.intro{margin-bottom:22px}article{break-inside:avoid;border-top:1px solid #d9dee6;padding:15px 0}article header{display:flex;justify-content:space-between;align-items:flex-start;margin:0 0 8px;padding:0}.workers{font-weight:bold}.weather{color:#586476;font-size:11px}.photos{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}figure{margin:0;width:31%;break-inside:avoid}figure img{width:100%;max-height:180px;object-fit:contain}figcaption{font-size:9px;color:#687385}@page{size:A4;margin:15mm}@media print{body{margin:0}}</style></head><body><div class="intro"><h1>Baustellenjournal</h1><div class="sub">Leibniz-Gymnasium Altdorf · BA3 Freianlagen</div><div class="sub">${esc(title)} · Export: ${new Date().toLocaleString('de-DE')}</div></div>${cards}</body></html>`;
 }
 function openPdf(list,title){
  if(!list.length){$('status').textContent='Keine Protokolle für den PDF-Export vorhanden.';return}
